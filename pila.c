@@ -9,6 +9,10 @@ struct pila {
     size_t capacidad;  // Capacidad del arreglo 'datos'.
 };
 
+#define TINICIAL 4
+#define TREDIMENSION 2
+
+
 /* *****************************************************************
  *                    AUXILIARES DE LA PILA
  * *****************************************************************/
@@ -38,7 +42,7 @@ pila_t* pila_crear(void) {
         return NULL;
     }
 
-    void** datos_nuevo = malloc(4 * sizeof(void*)); //inicializo en potencia de dos
+    void** datos_nuevo = malloc(TINICIAL * sizeof(void*));
 
     if (datos_nuevo == NULL) {
     	free(pila);
@@ -47,7 +51,7 @@ pila_t* pila_crear(void) {
 
     pila->datos = datos_nuevo;
     pila->cantidad = 0;
-    pila->capacidad = 4; 
+    pila->capacidad = TINICIAL; 
 
 	return pila;
 
@@ -62,7 +66,7 @@ void pila_destruir(pila_t* pila) {
 
 bool pila_esta_vacia(const pila_t *pila) {
 
-	return pila->cantidad > 0;
+	return (pila->cantidad == 0);
 }
 
 
@@ -70,7 +74,7 @@ bool pila_apilar(pila_t* pila, void* valor) {
 
 	if (pila->cantidad == pila->capacidad){
 
-		size_t tam =  (pila->capacidad) * 2;
+		size_t tam =  (pila->capacidad) * TREDIMENSION;
 
 		if (!pila_redimensionar(pila, tam)) return false;
 	}
@@ -96,9 +100,9 @@ void* pila_desapilar(pila_t* pila){
 	void* valor = pila->datos[pila->cantidad-1];
 	pila->cantidad --;
 
-	if ((pila->cantidad)/4 == pila->capacidad){
+	if ((pila->cantidad)/4 == pila->capacidad && pila->capacidad > TREDIMENSION * TINICIAL){
 
-		size_t tam =  (pila->capacidad) / 2;
+		size_t tam =  (pila->capacidad) / TREDIMENSION;
 
 		pila_redimensionar(pila, tam);
 
